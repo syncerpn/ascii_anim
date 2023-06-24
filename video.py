@@ -9,6 +9,8 @@ from PIL import Image
 import cv2
 import numpy as np
 
+import cProfile
+
 from group_kernel import IMAGE_TEXT_2x2, IMAGE_TEXT_3x2, IMAGE_TEXT_4x2
 
 BW_THRESHOLD = 100
@@ -46,6 +48,12 @@ def np_image_to_text(image, group_kernel, gh, gw):
 
 if __name__ == "__main__":
     
+    # Create a profiler object
+    profiler = cProfile.Profile()
+
+    # Enable the profiler
+    profiler.enable()
+    
     video_file = 'sample.mp4'
     cap = cv2.VideoCapture(video_file)
     
@@ -53,7 +61,7 @@ if __name__ == "__main__":
 
     success, frame = cap.read()
     c = 0
-    while success:
+    while success and c <= 2:
         print(c)
         image = Image.fromarray(frame).convert("L")
         video_text_data[c] = np_image_to_text(image, IMAGE_TEXT_4x2, 4, 2)
@@ -64,3 +72,9 @@ if __name__ == "__main__":
     
     for ci in range(c):
         print(video_text_data[ci])
+        
+    # Disable the profiler
+    profiler.disable()
+
+    # Print the profiling results
+    profiler.print_stats()

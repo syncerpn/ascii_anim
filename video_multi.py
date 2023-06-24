@@ -77,4 +77,4 @@ if __name__ == "__main__":
         for ci in range(c):
             os.system('cls')
             print(video_text_data[ci])
-            time.sleep(0.016667)
+            time.sleep(0.01)
